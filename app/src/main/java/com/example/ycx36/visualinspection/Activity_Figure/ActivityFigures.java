@@ -41,8 +41,8 @@ public class ActivityFigures extends AppCompatActivity {
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add("  调制度图  ", Fragment_ModulFigure.class)
                 .add("   掩膜图   ", Fragment_MaskFigure.class)
-                .add(" 包裹相位图 ", Fragment_WrapphaseFigure.class)
-                .add("解包裹相位图", Fragment_unWrapphaseFigure.class)
+//                .add(" 包裹相位图 ", Fragment_WrapphaseFigure.class)
+//                .add("解包裹相位图", Fragment_unWrapphaseFigure.class)
                 .create());
 
         ViewPager viewPager = findViewById(R.id.viewpager);

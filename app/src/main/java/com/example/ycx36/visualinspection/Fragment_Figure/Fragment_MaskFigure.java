@@ -6,14 +6,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Animatable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.math.MathUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
@@ -58,11 +61,14 @@ public class Fragment_MaskFigure extends Fragment{
 
     @BindView(R.id.photo_drawee_view) PhotoDraweeView mPhotoDraweeView;
     @BindView(R.id.avi) AVLoadingIndicatorView avi;
+    @BindView(R.id.text_tip) TextView text_tip;
 
+    @SuppressLint("NewApi")
     public View onCreateView(LayoutInflater inflater , ViewGroup container , Bundle savedInstanceState){
         if (view == null) {
             view = inflater.inflate(R.layout.layout_mask, container, false);
             ButterKnife.bind(this, view);
+            text_tip.bringToFront();
             Fresco.initialize(Objects.requireNonNull(getActivity()));
             modulFigure = new Fragment_ModulFigure();
             wrapphaseFigure = new Fragment_WrapphaseFigure();
@@ -151,7 +157,6 @@ public class Fragment_MaskFigure extends Fragment{
             Toast.makeText(getActivity(), "图片格式错误", Toast.LENGTH_SHORT).show();
         }
         //获取所有像素点的调制度
-
         return Modul;
     }
 
@@ -208,6 +213,7 @@ public class Fragment_MaskFigure extends Fragment{
      * @param uri：图片的本地url地址
      * @return Bitmap；
      */
+    @SuppressLint("NewApi")
     private Bitmap decodeUriAsBitmap(Uri uri) {
         Bitmap bitmap = null;
         try {
@@ -222,6 +228,7 @@ public class Fragment_MaskFigure extends Fragment{
     /**
      * 显示掩膜图片并且自动保存图片到本地
      */
+    @SuppressLint("NewApi")
     public void showMaskFigure(int x, int y) {
         double[] d = getGaryCS3(getMaskData());   //主要耗时操作
         Mat frameRf1 = new Mat(x, y, CV_8UC1, new Scalar(0));

@@ -64,22 +64,12 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         requestPermissions();
 
-//        double[] value = new double[]{1,2,3,4,5,6,7,8,9};
-//        Mat mat1 = new Mat(3,3, CvType.CV_32FC1);
-//        Mat mat2 = new Mat(3,3, CvType.CV_32FC1);
-//        mat1.put(0,0,value);
-//        Core.idct(mat1,mat2);
-//        double[] bb = mat1.get(1,1);
-//        Log.d("xxxxx.......1","  "+bb[0]);
-//        Log.d("xxxxx.......2","  "+mat2.get(0,1)[0]);
-
-
     }
 
 
     //控件点击事件
     @SuppressLint("SetTextI18n")
-    @OnClick({R.id.add_photo1, R.id.add_photo2, R.id.add_photo3, R.id.add_photo4, R.id.rgb2greybtn, R.id.bt2, R.id.showPhoto})
+    @OnClick({R.id.add_photo1, R.id.add_photo2, R.id.add_photo3, R.id.add_photo4, R.id.shoot, R.id.showPhoto})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.add_photo1:
@@ -102,14 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 intentToPickPic4.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/png");
                 startActivityForResult(intentToPickPic4, 4);
                 break;
-            case R.id.rgb2greybtn:  //获取调制度（此按钮暂时不用）
-                if (flag1 == 1 && flag2 == 1 && flag3 == 1 && flag4 == 1) {
-                    //
-                } else {
-                    Toast.makeText(MainActivity.this, "请添加图片", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.bt2:  //打开摄像头
+            case R.id.shoot:  //打开摄像头
                 Intent intent = new Intent(MainActivity.this, Activity_Camera.class);
                 startActivity(intent);
                 break;
