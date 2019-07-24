@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
-import android.support.v4.math.MathUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
 import com.example.ycx36.visualinspection.R;
-import com.example.ycx36.visualinspection.util.CommonUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -56,7 +53,6 @@ public class Fragment_MaskFigure extends Fragment{
     private double min = Double.POSITIVE_INFINITY;  //调制度的最小值，初始值定义为无穷大 （不断比较最终将获取到最小值）
     private double max_m = 0;    //调制度的最大值 （不断比较最终将获取到最大值）
     private double max_w = 0;    //包裹相位的最大值 （不断比较最终将获取到最大值）
-    CommonUtil commonUtil = new CommonUtil();//获取通用工具类对象
     String[] paths;
 
     @BindView(R.id.photo_drawee_view) PhotoDraweeView mPhotoDraweeView;
@@ -133,12 +129,7 @@ public class Fragment_MaskFigure extends Fragment{
         int[] k2 = GetGreyArray(bitmap2);
         int[] k3 = GetGreyArray(bitmap3);
         int[] k4 = GetGreyArray(bitmap4);
-        int leng1 = k1.length;
-        int leng2 = k2.length;
-        int leng3 = k3.length;
-        int leng4 = k4.length;
-        int[] arr = {leng1, leng2, leng3, leng4};
-        int leng = commonUtil.GetMinimum(arr);  //获取四个图片中像素点总数的最小值
+        int leng = k1.length;
         double[] Modul = new double[leng];
         try {
             for (int n = 0; n < leng; n++) {

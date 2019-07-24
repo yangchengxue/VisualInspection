@@ -19,7 +19,6 @@ import android.widget.Toast;
 import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
 import com.example.ycx36.visualinspection.MainActivity;
 import com.example.ycx36.visualinspection.R;
-import com.example.ycx36.visualinspection.util.CommonUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -49,7 +48,6 @@ public class Fragment_ModulFigure extends Fragment{
     String[] paths;
     Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
     double[] Modul;
-    private CommonUtil commonUtil = new CommonUtil();
 
     @BindView(R.id.photo_drawee_view2) PhotoDraweeView mPhotoDraweeView;
     @BindView(R.id.avi2) AVLoadingIndicatorView avi;
@@ -160,12 +158,8 @@ public class Fragment_ModulFigure extends Fragment{
         int[] k2 = GetGreyArray(bitmap2);
         int[] k3 = GetGreyArray(bitmap3);
         int[] k4 = GetGreyArray(bitmap4);
-        int leng1 = k1.length;
-        int leng2 = k2.length;
-        int leng3 = k3.length;
-        int leng4 = k4.length;
-        int[] arr = {leng1, leng2, leng3, leng4};
-        int leng = commonUtil.GetMinimum(arr);  //获取四个图片中像素点总数的最小值
+        int leng = k1.length;
+        Log.d("lengggg",""+leng);
         double[] Modul = new double[leng];
         try {
             for (int n = 0; n < leng; n++) {

@@ -1,12 +1,10 @@
 package com.example.ycx36.visualinspection;
 
-import android.Manifest;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -14,12 +12,7 @@ import android.graphics.Matrix;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +23,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -38,7 +30,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.mxn.soul.flowingdrawer_core.ElasticDrawer;
+import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.wang.avi.AVLoadingIndicatorView;
 
@@ -47,11 +39,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,12 +62,11 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
     private int flag2 = 1;  //音量减小键标志  （为1时可监听按下，为0时不可监听按下）
     private int P = 16;  //默认的P值 （用于计算生成条纹）
     private Camera mCamera;
-    private SurfaceHolder mHolder;//
-    private Bitmap bitmap = null;//
-    String picUrl;//
+    private SurfaceHolder mHolder;
+    private Bitmap bitmap = null;
     private int cameraPosition = 1; // 0代表前置摄像头，1代表后置摄像头
-    private Bitmap bm = null;//
-    private Camera.Parameters parameters;//
+    private Bitmap bm = null;
+    private Camera.Parameters parameters;
 
     private int y = 0,x = 0;   //手机的分辨率  x:高  y:宽
 
@@ -89,6 +77,7 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
         setContentView(R.layout.activity__camera);
         ButterKnife.bind(this);
         mDrawer.openMenu(); //默认打开抽屉
+
         try{
             initCmaeraFacing();
         }catch (Exception e){
@@ -127,21 +116,17 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
             File tempFile = new File("/sdcard/" + System.currentTimeMillis() + ".png");
             try {
                 FileOutputStream fos = new FileOutputStream(tempFile);
-
                 fos.write(data);
                 fos.close();
-
                 bm = BitmapFactory.decodeByteArray(data, 0, data.length);
-
                 Matrix matrix = new Matrix();
                 if (cameraPosition == 1) {
                     matrix.postRotate(90);
                 } else {
                     matrix.postRotate(270);
                 }
-
-                bitmap = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), matrix, true);
-
+                bitmap = Bitmap.createBitmap(bm, 0, 0, 890, 1024, matrix, true);
+                Log.d("asfqbb",""+  bitmap.getWidth() + "       "+bitmap.getHeight());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -153,12 +138,6 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
      */
     private void checkSoftStage() {
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {  //判断是否存在SD卡
-//            String rootPath = Environment.getExternalStorageDirectory().getPath();  //获取SD卡的根目录
-//            Log.d("path11...",""+rootPath);
-//            File file = new File("/sdcard/Image/");
-//            if (!file.exists()) {
-//                file.mkdir();
-//            }
         } else {
             new AlertDialog.Builder(this).setMessage("检测到手机没有存储卡！请插入手机存储卡再开启本应用。")
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -199,12 +178,6 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
      * 点击事件
      **/
     public void startCamera() {
-        parameters = mCamera.getParameters();
-        parameters.setPictureFormat(ImageFormat.JPEG);
-        parameters.setPictureSize(1920, 1080);
-        mCamera.setParameters(parameters);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-
         mCamera.autoFocus(new Camera.AutoFocusCallback() {
             @Override
             public void onAutoFocus(boolean success, Camera camera) {
@@ -220,6 +193,10 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
         super.onResume();
         if (mCamera == null) {
             mCamera = getCamera();
+            parameters = mCamera.getParameters();
+            parameters.setPictureFormat(ImageFormat.JPEG);
+            mCamera.setParameters(parameters);
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             if (mHolder != null) {
                 try{setStartPrevicw(mCamera, mHolder);}catch (Exception e){
                     Toast.makeText(Activity_Camera.this,"相机不可用。",Toast.LENGTH_SHORT).show();
@@ -462,12 +439,12 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
             case R.id.RL_7: //四连拍模式
 
                 break;
-                case R.id.id_reset_camera:
-                    mCamera.startPreview();
-                    bm.recycle();
-                    bitmap.recycle();
-                    id_reset_camera.setVisibility(View.GONE);
-                    break;
+            case R.id.id_reset_camera:
+                mCamera.startPreview();
+                bm.recycle();
+                bitmap.recycle();
+                id_reset_camera.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -480,12 +457,16 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
             case KeyEvent.KEYCODE_VOLUME_DOWN: //音量减小键
                 if (flag2 == 1) {
                     flag2 = 0;
-                    updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
-                    //保存后重启相机
-                    mCamera.startPreview();
-                    bm.recycle();
-                    bitmap.recycle();
-                    id_reset_camera.setVisibility(View.GONE);
+                    if (bitmap != null){
+                        updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
+                        //保存后重启相机
+                        mCamera.startPreview();
+                        bm.recycle();
+                        bitmap.recycle();
+                        id_reset_camera.setVisibility(View.GONE);
+                    }else{
+                        Toast.makeText(Activity_Camera.this,"音量上键为拍照，音量下键为保存，请先拍照。",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_UP:  //音量增加键
@@ -522,8 +503,11 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
         return super.onKeyDown(keyCode, event);
     }
 
+
+    Bitmap bitmap1,bitmap2,bitmap3,bitmap4;
+    Uri uri1,uri2,uri3,uri4;
     /**拍照并保存本地
-     *
+     *四连拍
      * */
     public void TakeAndSave(){
         startCamera();//开始拍照------第一张
@@ -532,52 +516,75 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
             public void run() {
                 try {
                     Thread.sleep(2000); //线程睡眠某段时间后保存照片并重启相机
-                    updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
-                    //保存后重启相机
+                    uri1 = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,null));
                     mCamera.startPreview();
-                    bm.recycle();
-                    bitmap.recycle();
-                    iv_StripePhoto.setImageBitmap(getStripePhoto(x,y,P,Math.PI/2,-457));
+                    bitmap2 = getStripePhoto(x,y,P,Math.PI/2,-457);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            iv_StripePhoto.setImageBitmap(bitmap2);
+                        }
+                    });
                     startCamera();//开始拍照 ------第二张
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 Thread.sleep(2000); //线程睡眠某段时间后保存照片并重启相机
-                                updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
-                                //保存后重启相机
+//                                bitmap2 = bitmap;
+                                uri2 = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,null));
                                 mCamera.startPreview();
-                                bm.recycle();
-                                bitmap.recycle();
-                                iv_StripePhoto.setImageBitmap(getStripePhoto(x,y,P,Math.PI,-457));
+                                bitmap3 = getStripePhoto(x,y,P,Math.PI,-457);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        iv_StripePhoto.setImageBitmap(bitmap3);
+                                    }
+                                });
                                 startCamera();//开始拍照------第三张
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
                                             Thread.sleep(2000); //线程睡眠某段时间后保存照片并重启相机
-                                            updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
-                                            //保存后重启相机
+//                                            bitmap3 = bitmap;
+                                            uri3 = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,null));
                                             mCamera.startPreview();
-                                            bm.recycle();
-                                            bitmap.recycle();
-                                            iv_StripePhoto.setImageBitmap(getStripePhoto(x,y,P,Math.PI*3/2,-457));
+                                            bitmap4 = getStripePhoto(x,y,P,Math.PI*3/2,-457);
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    iv_StripePhoto.setImageBitmap(bitmap4);
+                                                }
+                                            });
                                             startCamera();//开始拍照------第四张
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     try {
                                                         Thread.sleep(2000); //线程睡眠某段时间后保存照片并重启相机
-                                                        updatePhotoMedia(saveImage(bitmap),Activity_Camera.this);
-                                                        //保存后重启相机
+//                                                        bitmap4 = bitmap;
+                                                        uri4 = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null,null));
                                                         mCamera.startPreview();
-                                                        bm.recycle();
-                                                        bitmap.recycle();
                                                         runOnUiThread(new Runnable() {
                                                             @SuppressLint("SetTextI18n")
                                                             @Override
                                                             public void run() {
-                                                                iv_StripePhoto.setImageBitmap(null);
+                                                                bitmap1.recycle();
+                                                                bitmap2.recycle();
+                                                                bitmap3.recycle();
+                                                                bitmap4.recycle();
+                                                                bm.recycle();
+                                                                bitmap.recycle();
+                                                                finish();
+                                                                Intent intentx = new Intent(Activity_Camera.this, ActivityFigures.class);
+                                                                Bundle bundle = new Bundle();
+                                                                bundle.putString("uri1", uri1.toString());  //写入数据
+                                                                bundle.putString("uri2", uri2.toString());  //写入数据
+                                                                bundle.putString("uri3", uri3.toString());  //写入数据
+                                                                bundle.putString("uri4", uri4.toString());  //写入数据
+                                                                intentx.putExtras(bundle);
+                                                                startActivity(intentx);
                                                             }
                                                         });
                                                     } catch (InterruptedException e) {
@@ -662,13 +669,13 @@ public class Activity_Camera extends AppCompatActivity implements SurfaceHolder.
                 @Override
                 public void run() {
                     avi.show();
-                    final Bitmap bitmap = getStripePhoto(x,y,P,0,-457);
+                    bitmap1 = getStripePhoto(x,y,P,0,-457);
                     runOnUiThread(new Runnable() {
                         @SuppressLint("SetTextI18n")
                         @Override
                         public void run() {
                             avi.hide();
-                            iv_StripePhoto.setImageBitmap(bitmap);
+                            iv_StripePhoto.setImageBitmap(bitmap1);
                             Toast.makeText(Activity_Camera.this, "已切换至四连拍模式", Toast.LENGTH_SHORT).show();
                         }
                     });

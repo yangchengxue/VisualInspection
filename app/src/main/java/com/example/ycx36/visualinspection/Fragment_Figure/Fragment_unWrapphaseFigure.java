@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
 import com.example.ycx36.visualinspection.R;
-import com.example.ycx36.visualinspection.util.CommonUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -55,7 +54,6 @@ public class Fragment_unWrapphaseFigure extends Fragment {
     private double min_UnWrapphase1 = Double.POSITIVE_INFINITY;
     private double max_UnWrapphase1 = 0;
     double[] UnWrapphase1;
-    CommonUtil commonUtil = new CommonUtil();//获取通用工具类对象
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,7 +67,6 @@ public class Fragment_unWrapphaseFigure extends Fragment {
                 public void run() {
                     UnWrapphase1 = getUnWrapphase(bitmap1, bitmap2, bitmap3, bitmap4);
                     // temp=255*(1-(unwrapphi1-min(unwrapphi1(:)))/(max(unwrapphi1(:))-min(unwrapphi1(:))));
-
                     try{
                         //showWrapphaseFigure(xwidth, xhigh, Wrapphase1); //显示
                         showUnWrapphaseFigure(xwidth, xhigh, UnWrapphase1);
@@ -168,13 +165,7 @@ public class Fragment_unWrapphaseFigure extends Fragment {
         int[] k2 = GetGreyArray(bitmap2);
         int[] k3 = GetGreyArray(bitmap3);
         int[] k4 = GetGreyArray(bitmap4);
-        int leng1 = k1.length;
-        int leng2 = k2.length;
-        int leng3 = k3.length;
-        int leng4 = k4.length;
-        int[] arr = {leng1, leng2, leng3, leng4};
-        int leng = commonUtil.GetMinimum(arr);  //获取四个图片中像素点总数的最小值
-        Log.d("dsdasdasd2222333333333","  "+leng);
+        int leng = k1.length;
 //        showResponse3(leng); //显示像素点总数在UI界面中；
         double[] Wrapphasex = new double[leng];
         double[] cosWrapphasex = new double[leng];
@@ -324,7 +315,6 @@ public class Fragment_unWrapphaseFigure extends Fragment {
     public int[] GetGreyArray(Bitmap img) {
         int width = img.getWidth();            //获取位图的宽(列)
         int height = img.getHeight();        //获取位图的高（行）
-        Log.d("dsdasdasd2222","  "+width*height);
         if (sumOfAllPixels > width * height) {
             sumOfAllPixels = width * height;
             xwidth = height;

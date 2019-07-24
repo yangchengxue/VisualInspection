@@ -13,15 +13,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ycx36.visualinspection.Activity_Figure.ActivityFigures;
-import com.example.ycx36.visualinspection.MainActivity;
 import com.example.ycx36.visualinspection.R;
-import com.example.ycx36.visualinspection.util.CommonUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.backends.pipeline.PipelineDraweeControllerBuilder;
 import com.facebook.drawee.controller.BaseControllerListener;
@@ -51,7 +46,6 @@ public class Fragment_WrapphaseFigure extends Fragment {
     Bitmap bitmap1, bitmap2, bitmap3, bitmap4;
     double[] Wrapphase1;
     String[] paths;
-    CommonUtil commonUtil = new CommonUtil();//获取通用工具类对象
 
     @BindView(R.id.photo_drawee_view) PhotoDraweeView mPhotoDraweeView;
     @BindView(R.id.avi) AVLoadingIndicatorView avi;
@@ -123,12 +117,7 @@ public class Fragment_WrapphaseFigure extends Fragment {
         int[] k2 = GetGreyArray(bitmap2);
         int[] k3 = GetGreyArray(bitmap3);
         int[] k4 = GetGreyArray(bitmap4);
-        int leng1 = k1.length;
-        int leng2 = k2.length;
-        int leng3 = k3.length;
-        int leng4 = k4.length;
-        int[] arr = {leng1, leng2, leng3, leng4};
-        int leng = commonUtil.GetMinimum(arr);  //获取四个图片中像素点总数的最小值
+        int leng = k1.length;
 //        showResponse3(leng); //显示像素点总数在UI界面中；
         double[] Wrapphase = new double[leng];
         try {

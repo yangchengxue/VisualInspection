@@ -14,6 +14,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <SurfaceView
             android:id="@+id/id_graph_sfv"
             android:layout_width="match_parent"
@@ -87,6 +88,7 @@
                     android:background="@drawable/takephoto"/>
             </FrameLayout>
         </RelativeLayout>
+
     </RelativeLayout>
 
     <!--menu-->
